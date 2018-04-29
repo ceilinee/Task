@@ -17,6 +17,10 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+if(process.env.NODE_ENV === "production"){
+  const filePath = path.join(__dirname, 'build')
+  app.use(express.static(filePath))
+}
 app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
