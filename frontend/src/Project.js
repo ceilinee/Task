@@ -44,6 +44,7 @@ export default class Project extends React.Component {
 	}
   render(){
 		console.log(this.props.projects.idProject);
+		if(this.props.projects.checked == 0 && this.props.showComplete == false){
     return(
 				<div className = "box">
 						<div>
@@ -54,11 +55,36 @@ export default class Project extends React.Component {
 										type="checkbox"
 										checked={this.state.project}
 										onChange={this.handleChange} />
-										{this.props.projects.Name}
+										{this.props.projects.Name} ({this.props.projects.dateDue} hr)
 								</label>
 								</div>
 						</div>
 				</div>
-        );
+      );
+		  }
+			else if(this.props.projects.checked == 1 && this.props.showComplete == true){
+				return(
+						<div className = "box">
+								<div>
+									<div>
+										<label>
+											<input
+												name="isGoing"
+												type="checkbox"
+												checked={this.state.project}
+												onChange={this.handleChange} />
+												{this.props.projects.Name} ({this.props.projects.dateDue} hr)
+										</label>
+									</div>
+								</div>
+						</div>
+				);
+			}
+			else{
+				return(
+					<div>
+					</div>
+				)
+			}
     }
   }

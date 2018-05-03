@@ -12,6 +12,29 @@
   /* margin-left: 10px; */
   /* margin-right: 10px; */
 }
+.project-space{
+  margin-top:150px;
+}
+.today{
+  margin-left: 40%;
+  color: white;
+  font-size: 30px;
+  margin-top: -220px;
+  font-weight: 100;
+}
+.checked{
+  background-color: #dd797e;
+  margin-top: 180px;
+  margin-bottom: -30px;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  /* height: 30px; */
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 10px;
+}
 .task {
   width: 100%;
   height: 250px;

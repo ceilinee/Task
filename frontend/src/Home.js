@@ -27,6 +27,8 @@ class Home extends Component {
       project: [],
       width: 0,
       height: 0,
+      showComplete: false,
+      check: 0,
     }
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.openModal = this.openModal.bind(this);
@@ -38,6 +40,7 @@ class Home extends Component {
   };
   componentDidMount() {
     this.updateWindowDimensions();
+    this.fetchProject();
     window.addEventListener('resize', this.updateWindowDimensions);
   }
   componentWillUnmount() {
@@ -61,6 +64,15 @@ class Home extends Component {
     this.setState({
       project: data,
     })
+    var x = 0;
+    for(var i = 0; i<data.length; i++){
+      if(data[i].checked == '1'){
+        x++;
+      }
+    }
+    this.setState({
+      check: x,
+    })
   }
   openModal() {
     this.setState({
@@ -80,11 +92,11 @@ class Home extends Component {
   }
   handleAddProject = () => {
     return axios.post('/users/project', { name: this.state.projectName, date: this.state.date , idUsers: UserID.getID()})
-    .then(response => console.log(response)).then(this.setState({name: '', date: ''}));
+    .then(() => this.fetchProject());
   }
   setDate = (event) => {
     this.setState({
-      date : event,
+      date : event.target.value,
     })
     console.log(this.state.date);
   }
@@ -130,7 +142,7 @@ class Home extends Component {
         </div>
         <MuiThemeProvider>
           <TextField
-            floatingLabelText="Time Due"
+            floatingLabelText="Estimated Time(hrs)"
             floatingLabelStyle={styles.floatingLabelStyle}
             floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
             underlineFocusStyle={styles.underlineFocusStyle}
@@ -144,7 +156,26 @@ class Home extends Component {
       </Modal>
     )
   }
+  toggleCheck =() => {
+    console.log(this.state.showComplete);
+    if(this.state.showComplete){
+    this.setState({showComplete : false})
+    }
+    else{
+      this.setState({showComplete : true})
+    }
+  }
   render() {
+    var check = 0;
+    var complete = 'completed';
+    if(!this.state.showComplete){
+      check=this.state.check;
+      complete='completed';
+    }
+    else{
+      check=this.state.project.length-this.state.check;
+      complete='incomplete';
+    }
     if(this.state.width > 560){
       return (
         <div>
@@ -166,13 +197,22 @@ class Home extends Component {
               +
               </div>
           </div>
+          <div className = "add">
+              <div className = "today">
+               {moment().format("MMMM Do YYYY, h:mm a")}
+              </div>
+          </div>
           {this.modalAddProject()}
+          <div className="project-space">
+          <div className="checked" onClick={() => {this.toggleCheck()}}>{check} {complete}</div>
           {this.state.project.map(projects =>
               <Project
               key={projects.idProject}
               projects={projects}
+              showComplete={this.state.showComplete}
             />
           )}
+          </div>
         </div>
       </div>
       </div>
