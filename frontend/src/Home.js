@@ -27,7 +27,9 @@ class Home extends Component {
       project: [],
       width: 0,
       height: 0,
+      timeSpent: 0,
       showComplete: false,
+      complete: [],
       check: 0,
     }
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -61,17 +63,34 @@ class Home extends Component {
   }
   setProject = (data) => {
     console.log(data);
-    this.setState({
-      project: data,
-    })
+    var array = [];
+    var completed = [];
     var x = 0;
+    var time = 0;
     for(var i = 0; i<data.length; i++){
-      if(data[i].checked == '1'){
-        x++;
+      console.log(moment(data[i].dateMade).fromNow(true));
+      var number = moment(data[i].dateMade).fromNow(true).toString();
+      var hours = number.substring(0,2);
+      if(parseFloat(hours)< 24){
+        if(data[i].checked == '1'){
+          x++;
+          time = time + parseFloat(data[i].dateDue);
+          completed.push(data[i]);
+          console.log(completed);
+        }
+        else{
+          array.push(data[i]);
+          console.log(array);
+        }
       }
     }
     this.setState({
+      project: array,
+      complete: completed,
+    })
+    this.setState({
       check: x,
+      timeSpent: time,
     })
   }
   openModal() {
@@ -91,7 +110,7 @@ class Home extends Component {
     console.log(this.state.projectName);
   }
   handleAddProject = () => {
-    return axios.post('/users/project', { name: this.state.projectName, date: this.state.date , idUsers: UserID.getID()})
+    return axios.post('/users/project', { name: this.state.projectName, date: this.state.date , dateMade: moment(), idUsers: UserID.getID()})
     .then(() => this.fetchProject());
   }
   setDate = (event) => {
@@ -99,6 +118,35 @@ class Home extends Component {
       date : event.target.value,
     })
     console.log(this.state.date);
+  }
+  renderProjects = () => {
+    var projects = this.state.project;
+    if(this.state.showComplete){
+      return(
+      <div>
+      {this.state.complete.map(projects =>
+          <Project
+          key={projects.idProject}
+          projects={projects}
+          refresh={() => {this.fetchProject()}}
+        />
+      )}
+      </div>
+      )
+    }
+    else{
+    return(
+      <div>
+      {this.state.project.map(projects =>
+          <Project
+          key={projects.idProject}
+          projects={projects}
+          refresh={() => {this.fetchProject()}}
+        />
+      )}
+      </div>
+    )
+    }
   }
   modalAddProject() {
     const styles = {
@@ -168,18 +216,17 @@ class Home extends Component {
   render() {
     var check = 0;
     var complete = 'completed';
-    if(!this.state.showComplete){
-      check=this.state.check;
+    if(this.state.showComplete){
+      check=this.state.project.length;
       complete='completed';
     }
     else{
-      check=this.state.project.length-this.state.check;
+      check=this.state.complete.length;
       complete='incomplete';
     }
     if(this.state.width > 560){
       return (
         <div>
-          <img src={Error} className="Error"/>
           <div className="Message">
           This webapp is only optimized for mobile devices, sorry for the inconvenience!
           </div>
@@ -205,13 +252,10 @@ class Home extends Component {
           {this.modalAddProject()}
           <div className="project-space">
           <div className="checked" onClick={() => {this.toggleCheck()}}>{check} {complete}</div>
-          {this.state.project.map(projects =>
-              <Project
-              key={projects.idProject}
-              projects={projects}
-              showComplete={this.state.showComplete}
-            />
-          )}
+          <div className="timeSpent">
+          {this.state.timeSpent} hours spent working today
+          </div>
+          {this.renderProjects()}
           </div>
         </div>
       </div>

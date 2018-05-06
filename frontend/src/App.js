@@ -7,6 +7,8 @@ import TextField from '../node_modules/material-ui/TextField';
 import MuiThemeProvider from '../node_modules/material-ui/styles/MuiThemeProvider';
 import './App.css';
 import './tab.css';
+import './home.css';
+import Error from './error.png';
 import UserID from './UserID';
 
 class App extends Component {
@@ -15,14 +17,28 @@ class App extends Component {
     this.state = {
       redirect: false,
       email: '',
-      password: ''}
-
+      password: '',
+      width: 0,
+      height: 0,
+    }
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.handleSignUp= this.handleSignUp.bind(this);
     this.handleLogIn= this.handleLogIn.bind(this);
   }
+  eventLogger = (e: MouseEvent, data: Object) => {
+    console.log('Event: ', e);
+    console.log('Data: ', data);
+  };
   componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
   }
-
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+  updateWindowDimensions() {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
+  }
   setEmail = (event) => {
       this.setState({
           email: event.target.value
@@ -76,6 +92,16 @@ class App extends Component {
     if (this.state.redirect) {
     return <Redirect push to="/home" />;
     }
+    if(this.state.width > 560){
+      return (
+        <div>
+          <div className="Message">
+          This webapp is only optimized for mobile devices, sorry for the inconvenience!
+          </div>
+        </div>
+      )
+    }
+    else{
     return (
       <div className="App">
         <div className = "Post">
@@ -143,6 +169,7 @@ class App extends Component {
         </div>
       </div>
     );
+  }
   }
 }
 

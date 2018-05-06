@@ -22,6 +22,19 @@
   margin-top: -220px;
   font-weight: 100;
 }
+.timeSpent{
+  background-color: #ffffff;
+  margin-top: 40px;
+  margin-bottom: -30px;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  /* height: 30px; */
+  text-align: center;
+  /* padding-top: 10px; */
+  /* padding-bottom: 10px; */
+  border-radius: 10px;
+}
 .checked{
   background-color: #dd797e;
   margin-top: 180px;
@@ -87,6 +100,7 @@
   font-family: Raleway;
   margin-left: 50px;
   margin-right: 50px;
+  margin-top: 50px;
 }
 .time{
   color: black;
