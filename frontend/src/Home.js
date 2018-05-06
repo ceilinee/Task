@@ -68,9 +68,12 @@ class Home extends Component {
     var x = 0;
     var time = 0;
     for(var i = 0; i<data.length; i++){
-      console.log(moment(data[i].dateMade).fromNow(true));
-      var number = moment(data[i].dateMade).fromNow(true).toString();
-      var hours = number.substring(0,2);
+      var now = moment();
+      var duration = moment.duration(now.diff(data[i].dateMade));
+      var hours = duration.asHours();
+      console.log(hours);
+      // var number = moment(data[i].dateMade).fromNow(true).toString();
+      // var hours = number.substring(0,2);
       if(parseFloat(hours)< 24){
         if(data[i].checked == '1'){
           x++;
@@ -218,11 +221,11 @@ class Home extends Component {
     var complete = 'completed';
     if(this.state.showComplete){
       check=this.state.project.length;
-      complete='completed';
+      complete='incomplete';
     }
     else{
       check=this.state.complete.length;
-      complete='incomplete';
+      complete='completed';
     }
     if(this.state.width > 560){
       return (
