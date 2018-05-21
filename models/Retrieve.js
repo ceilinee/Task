@@ -6,7 +6,7 @@ var Retrieve={
     return db.query("SELECT idUsers FROM Users WHERE email=\'"+email+"\' AND password=\'"+password+"\'", callback);
   },
   getProjects: function(id, callback){
-    return db.query("SELECT * FROM Project WHERE idUsers = \'"+id+"\' ORDER BY dateDue DESC", callback);
+    return db.query("SELECT * FROM Project WHERE idUsers = \'"+id+"\' ORDER BY dateDue ASC", callback);
   },
 };
 module.exports = Retrieve;

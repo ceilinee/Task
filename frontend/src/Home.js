@@ -74,10 +74,12 @@ class Home extends Component {
       console.log(hours);
       // var number = moment(data[i].dateMade).fromNow(true).toString();
       // var hours = number.substring(0,2);
-      if(parseFloat(hours)< 24){
+      if(parseFloat(hours)< 50){
         if(data[i].checked == '1'){
           x++;
-          time = time + parseFloat(data[i].dateDue);
+          if(parseFloat(hours)< 30){
+            time = time + parseFloat(data[i].dateDue);
+          }
           completed.push(data[i]);
           console.log(completed);
         }
@@ -201,7 +203,7 @@ class Home extends Component {
             onChange={this.setDate}/>
         </MuiThemeProvider>
         <button className= "addButton" onClick={() => {
-            this.handleAddProject().then(alert("New Project Added!"))}}>
+            this.handleAddProject().then(alert("New Project Added!")).then(this.closeModal).then(() => {this.setState({ projectName: '', date:''})})}}>
             Add Project
         </button>
       </Modal>
