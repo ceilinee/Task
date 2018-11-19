@@ -11,5 +11,8 @@ var Send={
   changeCheck: function (body, callback) {
     return db.query(`UPDATE Project SET checked = (CASE WHEN checked = '1' THEN 0 ELSE 1 END) WHERE Name = "${body.name}" AND idUsers = "${body.idUsers}"`, callback);
   },
+  deleteTask:function(query, callback){
+    return db.query("DELETE FROM Project WHERE (Name = \'"+query.name+"\' AND idUsers = \'"+query.idUsers+"\')", callback);
+  },
 };
 module.exports = Send;

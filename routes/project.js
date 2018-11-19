@@ -25,5 +25,15 @@ router.put('/true/', function(req, res, next) {
     }
   })
 });
+router.delete('/delete/', function(req, res, next) {
+  Send.deleteTask(req.query, function(err, rows){
+    if (err) {
+      res.json(err);
+    }
+    else {
+      res.json(rows);
+    }
+  });
+});
 
 module.exports = router;
